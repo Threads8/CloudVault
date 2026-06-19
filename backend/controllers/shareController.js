@@ -1,6 +1,6 @@
 const File = require('../models/File');
 const Activity = require('../models/Activity');
-const { v4: uuidv4 } = require('uuid');
+const crypto = require('crypto');
 const { containerClient, blobServiceClient } = require('../config/azure');
 const { generateBlobSASQueryParameters, BlobSASPermissions } = require('@azure/storage-blob');
 
@@ -36,7 +36,7 @@ const createShareLink = async (req, res, next) => {
       throw new Error('File not found');
     }
 
-    const linkId = uuidv4().replace(/-/g, '').substring(0, 10);
+    const linkId = crypto.randomUUID().replace(/-/g, '').substring(0, 10);
 
     file.shareLink = {
       linkId,

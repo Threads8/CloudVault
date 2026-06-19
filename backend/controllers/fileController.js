@@ -3,7 +3,7 @@ const User = require('../models/User');
 const Activity = require('../models/Activity');
 const { containerClient, blobServiceClient } = require('../config/azure');
 const { generateBlobSASQueryParameters, BlobSASPermissions } = require('@azure/storage-blob');
-const { v4: uuidv4 } = require('uuid');
+const crypto = require('crypto');
 
 // Helper to generate SAS Token for Azure Blob
 const generateSasToken = (blobName) => {
@@ -43,7 +43,7 @@ const uploadFile = async (req, res, next) => {
     // Check if file with same name exists for versioning
     let existingFile = await File.findOne({ owner: req.user._id, fileName, folderId });
 
-    const azureBlobName = `uploads/${req.user._id}/${uuidv4()}-${fileName}`;
+    const azureBlobName = `uploads/${req.user._id}/${crypto.randomUUID()}-${fileName}`;
     const blockBlobClient = containerClient.getBlockBlobClient(azureBlobName);
 
     // Upload to Azure
