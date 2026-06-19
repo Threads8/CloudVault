@@ -18,11 +18,25 @@ app.use(express.json());
 app.use(morgan('dev'));
 
 // Routes
-app.use('/api/auth', require('./routes/authRoutes'));
-app.use('/api/files', require('./routes/fileRoutes'));
-app.use('/api/folders', require('./routes/folderRoutes'));
-app.use('/api/share', require('./routes/shareRoutes'));
-app.use('/api/analytics', require('./routes/analyticsRoutes'));
+const authRoutes = require('./routes/authRoutes');
+const fileRoutes = require('./routes/fileRoutes');
+const folderRoutes = require('./routes/folderRoutes');
+const shareRoutes = require('./routes/shareRoutes');
+const analyticsRoutes = require('./routes/analyticsRoutes');
+const errorMiddleware = require('./middleware/errorMiddleware');
+
+console.log('authRoutes:', typeof authRoutes, authRoutes);
+console.log('fileRoutes:', typeof fileRoutes, fileRoutes);
+console.log('folderRoutes:', typeof folderRoutes, folderRoutes);
+console.log('shareRoutes:', typeof shareRoutes, shareRoutes);
+console.log('analyticsRoutes:', typeof analyticsRoutes, analyticsRoutes);
+console.log('errorMiddleware:', typeof errorMiddleware, errorMiddleware);
+
+app.use('/api/auth', authRoutes);
+app.use('/api/files', fileRoutes);
+app.use('/api/folders', folderRoutes);
+app.use('/api/share', shareRoutes);
+app.use('/api/analytics', analyticsRoutes);
 
 // Basic route for testing
 app.get('/', (req, res) => {
@@ -30,7 +44,7 @@ app.get('/', (req, res) => {
 });
 
 // Global Error Handler
-app.use(require('./middleware/errorMiddleware'));
+app.use(errorMiddleware);
 
 const PORT = process.env.PORT || 5000;
 
